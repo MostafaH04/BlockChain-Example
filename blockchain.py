@@ -13,7 +13,9 @@ def proof_of_work(current_transactions):
     loading = ['|','|','|','|','/','/','/','/','-','-','-','-','-', '\\','\\','\\','\\', '|', '|', '|', '|']
     proof = 0
     loadingNum = 0
-    while validify(current_transactions, proof) != True:
+    while True:
+        if validify(current_transactions, proof) is True:
+            break
         if loadingNum < len(loading)-1:
             loadingNum += 1
         else:
@@ -30,19 +32,18 @@ def proof_of_work(current_transactions):
 def validify(current_transactions, proof):
     guessedHash = hashlib.sha256(f'{current_transactions}{proof}'.encode()).hexdigest()
 
-    if guessedHash[:5] == "00000":
+    if guessedHash[:4] == "0000":
         return True
     else:
         return False
 
 
-def new_block(proof, previousHash = None,current_transactions = current_transactions
-):
+def new_block(proof, previousHash = None,current_transactions = current_transactions):
     block = {
         'Location in Chain': str(len(chain)+1),
         'Time': str(time.time()),
         'Proof of Work': str(proof),
-        'Previous Hash': str(previousHash or hash(chain[-1])),
+        'Previous Hash': str(previousHash or hash(transactions[-1],chain[-1]['Proof of Work'])),
     }
     transactions.append(current_transactions)
     current_transactions = []
@@ -50,9 +51,8 @@ def new_block(proof, previousHash = None,current_transactions = current_transact
     return block
 
 
-def hash(block):
-    block_string = json.dumps(block, sort_keys=True).encode()
-    return hashlib.sha256(block_string).hexdigest()
+def hash(transactions,proof):
+    return hashlib.sha256(f'{transactions}{proof}'.encode()).hexdigest()
 
 def new_transaction(sender, recipient, amount):
     current_transactions.append(
