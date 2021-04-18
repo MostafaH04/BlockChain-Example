@@ -85,7 +85,7 @@ clear = lambda: os.system('cls')
 new_block(proof = 100, previousHash = 1)
 print(chain)
 
-input()
+input("\n\n\nPress Any Key To Continue")
 
 while True:
     clear = lambda: os.system('cls')
@@ -102,14 +102,14 @@ while True:
         else:
             print("Block transaction limit met, creating new block. Try again after")
             create()
-            input()
+            input("\n\n\nPress Any Key To Continue")
         clear()
     elif a == 2:
         if len(current_transactions) > 0:
             create()
         else:
             print("No transcations completed yet")
-            input()
+            input("\n\n\nPress Any Key To Continue")
         clear()
     elif a == 3:
         chain = []
@@ -129,11 +129,12 @@ while True:
                 print(i)
         else:
             print("Initial Block - No transactions")
-        input()
+        input("\n\n\nPress Any Key To Continue")
     elif a == 5:
         exit()    
     else:
         print("Not an option")
+        input("\n\n\nPress Any Key To Continue")
 
 
 
