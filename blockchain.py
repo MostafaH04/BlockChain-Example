@@ -5,8 +5,9 @@ import os
 import sys
 
 chain = []
+global current_transactions
 current_transactions = []
-transactions = []
+transactions = [{None}]
 transactionsLimit = 5
 
 def proof_of_work(current_transactions):
@@ -31,28 +32,29 @@ def proof_of_work(current_transactions):
 
 def validify(current_transactions, proof):
     guessedHash = hashlib.sha256(f'{current_transactions}{proof}'.encode()).hexdigest()
-
     if guessedHash[:4] == "0000":
         return True
     else:
         return False
 
 
-def new_block(proof, previousHash = None,current_transactions = current_transactions):
+def new_block(proof, previousHash = None):
     block = {
         'Location in Chain': str(len(chain)+1),
         'Time': str(time.time()),
         'Proof of Work': str(proof),
-        'Previous Hash': str(previousHash or hash(transactions[-1],chain[-1]['Proof of Work'])),
+        'Transactions': str(current_transactions),
+        'Previous Hash': str(previousHash or hash(chain[-1]['Transactions'],int(chain[-1]['Proof of Work']))),
     }
     transactions.append(current_transactions)
-    current_transactions = []
+    current_transactions.clear()
     chain.append(block)
     return block
 
 
-def hash(transactions,proof):
-    return hashlib.sha256(f'{transactions}{proof}'.encode()).hexdigest()
+def hash(transaction, proof):
+    new = hashlib.sha256(f'{transaction}{proof}'.encode()).hexdigest()
+    return new
 
 def new_transaction(sender, recipient, amount):
     current_transactions.append(
@@ -63,7 +65,6 @@ def new_transaction(sender, recipient, amount):
         }
     )
 
-    return int(chain[-1]['Location in Chain'])+1
 
 
 def info():
@@ -76,6 +77,7 @@ def info():
 def create():
     new_block(proof_of_work(current_transactions))
     print(f"Block #{chain[-1]['Location in Chain']} Created")
+    input("\n\n\nPress Enter To Continue")
 
 
 
@@ -85,7 +87,7 @@ clear = lambda: os.system('cls')
 new_block(proof = 100, previousHash = 1)
 print(chain)
 
-input("\n\n\nPress Any Key To Continue")
+input("\n\n\nPress Enter To Continue")
 
 while True:
     clear = lambda: os.system('cls')
@@ -102,15 +104,17 @@ while True:
         else:
             print("Block transaction limit met, creating new block. Try again after")
             create()
-            input("\n\n\nPress Any Key To Continue")
+            input("\n\n\nPress Enter To Continue")
         clear()
     elif a == 2:
         if len(current_transactions) > 0:
             create()
         else:
             print("No transcations completed yet")
-            input("\n\n\nPress Any Key To Continue")
+            input("\n\n\nPress Enter To Continue")
+
         clear()
+
     elif a == 3:
         chain = []
         new_block(proof = 100,previousHash = 1)
@@ -129,12 +133,12 @@ while True:
                 print(i)
         else:
             print("Initial Block - No transactions")
-        input("\n\n\nPress Any Key To Continue")
+        input("\n\n\nPress Enter To Continue")
     elif a == 5:
         exit()    
     else:
         print("Not an option")
-        input("\n\n\nPress Any Key To Continue")
+        input("\n\n\nPress Enter To Continue")
 
 
 
