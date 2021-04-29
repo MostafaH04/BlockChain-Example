@@ -5,6 +5,12 @@ import os
 import sys
 
 chain = []
+
+with open("chain.txt") as f:
+    chain = [line.rstrip() for line in f]
+
+f.close()
+
 global current_transactions
 current_transactions = []
 transactions = [{None}]
@@ -84,7 +90,7 @@ def create():
 clear = lambda: os.system('cls')
 
 
-new_block(proof = 100, previousHash = 1)
+
 print(chain)
 
 input("\n\n\nPress Enter To Continue")
@@ -135,7 +141,14 @@ while True:
             print("Initial Block - No transactions")
         input("\n\n\nPress Enter To Continue")
     elif a == 5:
-        exit()    
+        
+        f = open("chain.txt", "w")
+        for i in chain:
+            f.write(i+"\n")
+
+        f.close()
+
+        exit()
     else:
         print("Not an option")
         input("\n\n\nPress Enter To Continue")
