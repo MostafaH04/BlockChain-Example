@@ -6,10 +6,6 @@ import sys
 
 chain = []
 
-with open("chain.txt") as f:
-    chain = [line.rstrip() for line in f]
-
-f.close()
 
 global current_transactions
 current_transactions = []
@@ -30,7 +26,6 @@ def proof_of_work(current_transactions):
         
         sys.stdout.write("\rMining "+ loading[loadingNum])
         sys.stdout.flush()
-        sys.stdout.write('\b')
         #time.sleep(0.1)
         proof +=1
     
@@ -82,12 +77,10 @@ def info():
     
 def create():
     new_block(proof_of_work(current_transactions))
-    print(f"Block #{chain[-1]['Location in Chain']} Created")
+    print(f"\nBlock #{chain[-1]['Location in Chain']} Created")
     input("\n\n\nPress Enter To Continue")
 
 
-
-clear = lambda: os.system('cls')
 
 
 
@@ -96,8 +89,8 @@ print(chain)
 input("\n\n\nPress Enter To Continue")
 
 while True:
-    clear = lambda: os.system('cls')
-    clear()
+    
+    os.system('cls')
     
     for i in chain:
         print(i)
@@ -111,7 +104,7 @@ while True:
             print("Block transaction limit met, creating new block. Try again after")
             create()
             input("\n\n\nPress Enter To Continue")
-        clear()
+        os.system('cls')
     elif a == 2:
         if len(current_transactions) > 0:
             create()
@@ -119,14 +112,14 @@ while True:
             print("No transcations completed yet")
             input("\n\n\nPress Enter To Continue")
 
-        clear()
+        os.system('cls')
 
     elif a == 3:
         chain = []
         new_block(proof = 100,previousHash = 1)
-        clear()
+        os.system('cls')
     elif a == 4:
-        clear()
+        os.system('cls')
         for i in chain:
             print(i)
 
